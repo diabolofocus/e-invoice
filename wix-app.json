@@ -1,0 +1,12 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/wix-app.json",
+  "appId": "1ac3e6f4-a48b-4525-9d0f-f25a16421423",
+  "name": "transactions-manager",
+  "version": "1.0.0",
+  "permissions": [
+    "MANAGE_PAYMENTS",
+    "READ_PAYMENTS",
+    "MANAGE_ORDERS",
+    "READ_ORDERS"
+  ]
+}

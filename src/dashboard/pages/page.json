@@ -1,0 +1,5 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/dashboard-page.json",
+  "id": "4101c141-7a18-404d-86bb-98030d2558e0",
+  "title": "Transactions"
+}

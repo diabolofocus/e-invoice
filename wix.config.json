@@ -1,0 +1,5 @@
+{
+  "$schema": "https://dev.wix.com/wix-cli/schemas/wix-config.json",
+  "appId": "1ac3e6f4-a48b-4525-9d0f-f25a16421423",
+  "projectId": "transactions-manager"
+}

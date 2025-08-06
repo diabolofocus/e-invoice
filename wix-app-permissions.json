@@ -1,0 +1,39 @@
+{
+  "requiredPermissions": [
+    {
+      "permission": "MANAGE_PAYMENTS",
+      "description": "Required to access payment transaction data",
+      "scope": "site"
+    },
+    {
+      "permission": "READ_PAYMENTS", 
+      "description": "Required to read payment information",
+      "scope": "site"
+    },
+    {
+      "permission": "CASHIER_READ_TRANSACTIONS",
+      "description": "Required to read transaction data from Wix Cashier",
+      "scope": "site"
+    }
+  ],
+  "apiEndpoints": {
+    "transactions": "https://www.wixapis.com/payments/api/merchant/v2/transactions",
+    "documentation": "https://dev.wix.com/api/rest/wix-payments/transactions/introduction"
+  },
+  "appConfiguration": {
+    "appId": "1ac3e6f4-a48b-4525-9d0f-f25a16421423",
+    "name": "e-invoice",
+    "permissions": [
+      "MANAGE_PAYMENTS",
+      "READ_PAYMENTS",
+      "CASHIER_READ_TRANSACTIONS"
+    ]
+  },
+  "instructions": {
+    "1": "Go to Wix Developer Dashboard",
+    "2": "Navigate to your app settings", 
+    "3": "Add the permissions listed above",
+    "4": "Deploy your app to production or test environment",
+    "5": "The app will then have access to real transaction data"
+  }
+}

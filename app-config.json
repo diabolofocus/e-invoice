@@ -1,0 +1,58 @@
+{
+  "appDefinitionId": "1ac3e6f4-a48b-4525-9d0f-f25a16421423",
+  "appName": "transactions-manager",
+  "platformVersion": "1.0.0",
+  "UIModules": {
+    "BusinessManager": {
+      "pages": [
+        {
+          "componentId": "dashboard-page",
+          "title": "Transactions",
+          "path": "/dashboard",
+          "permissions": [
+            "MANAGE_PAYMENTS",
+            "VIEW_PAYMENTS",
+            "READ_PAYMENTS"
+          ]
+        }
+      ]
+    }
+  },
+  "eventHandlers": {},
+  "extensions": [
+    {
+      "name": "transactions-api",
+      "type": "backend",
+      "permissions": [
+        "MANAGE_PAYMENTS",
+        "VIEW_PAYMENTS", 
+        "READ_PAYMENTS",
+        "CASHIER.READ_TRANSACTIONS",
+        "PAYMENTS.READ_TRANSACTIONS"
+      ],
+      "functionName": "transactions"
+    }
+  ],
+  "permissions": [
+    {
+      "name": "MANAGE_PAYMENTS",
+      "description": "Access to manage payments and transactions"
+    },
+    {
+      "name": "VIEW_PAYMENTS", 
+      "description": "Access to view payment data"
+    },
+    {
+      "name": "READ_PAYMENTS",
+      "description": "Access to read payment information"
+    },
+    {
+      "name": "CASHIER.READ_TRANSACTIONS",
+      "description": "Access to read transaction data from Wix Cashier"
+    },
+    {
+      "name": "PAYMENTS.READ_TRANSACTIONS", 
+      "description": "Access to read transaction data from Wix Payments"
+    }
+  ]
+}
