@@ -16,6 +16,8 @@ import {
   Layout,
   IconButton,
   Loader,
+  PopoverMenu,
+  Checkbox,
 } from '@wix/design-system';
 import '@wix/design-system/styles.global.css';
 import * as Icons from '@wix/wix-ui-icons-common';
@@ -55,6 +57,16 @@ const TransactionsDashboard: FC = () => {
   const [timePeriod, setTimePeriod] = useState('30');
   const [loading, setLoading] = useState(false);
   const [usingMockData, setUsingMockData] = useState(true);
+  const [visibleColumns, setVisibleColumns] = useState({
+    transactionId: true,
+    customer: true,
+    amount: true,
+    paymentMethod: true,
+    date: true,
+    status: true,
+    description: true,
+    actions: true
+  });
 
   const loadTransactionData = async () => {
     setLoading(true);
@@ -68,7 +80,7 @@ const TransactionsDashboard: FC = () => {
       setUsingMockData(result.usingMockData);
 
       dashboard.showToast({
-        message: result.usingMockData 
+        message: result.usingMockData
           ? 'Transaction data loaded (demo data)'
           : 'Live transaction data loaded successfully'
       });
@@ -302,76 +314,117 @@ const TransactionsDashboard: FC = () => {
                 <Text>Loading transactions...</Text>
               </Box>
             ) : (
-              <Table
-                data={filteredTransactions}
-                columns={[
-                  {
-                    title: 'Transaction ID',
-                    render: (row) => <Text>{row.id}</Text>,
-                    width: '150px'
-                  },
-                  {
-                    title: 'Customer',
-                    render: (row) => (
-                      <Box direction="vertical">
-                        <Text size="small" weight="bold">{row.customerName || 'N/A'}</Text>
-                        <Text size="tiny" secondary>{row.customerEmail || 'N/A'}</Text>
-                      </Box>
-                    ),
-                    width: '200px'
-                  },
-                  {
-                    title: 'Amount',
-                    render: (row) => (
-                      <Text weight="bold">
-                        {transactionService.formatAmount(row.amount, row.currency)}
-                      </Text>
-                    ),
-                    width: '120px'
-                  },
-                  {
-                    title: 'Payment Method',
-                    render: (row) => <Text>{row.paymentMethod}</Text>,
-                    width: '130px'
-                  },
-                  {
-                    title: 'Date',
-                    render: (row) => <Text>{transactionService.formatDate(row.createdDate)}</Text>,
-                    width: '120px'
-                  },
-                  {
-                    title: 'Status',
-                    render: (row) => getStatusBadge(row.status),
-                    width: '120px'
-                  },
-                  {
-                    title: 'Description',
-                    render: (row) => (
-                      <Text size="small" secondary>
-                        {row.description || 'No description'}
-                      </Text>
-                    ),
-                    width: '200px'
-                  },
-                  {
-                    title: 'Actions',
-                    render: (row) => (
-                      <IconButton
-                        skin="standard"
-                        priority="secondary"
-                        onClick={() => dashboard.showToast({
-                          message: `View transaction ${row.id}`
-                        })}
+              <Box direction="vertical">
+                <Box marginBottom="12px">
+                  <PopoverMenu
+                    triggerElement={
+                      <Button
+                        skin="light"
+                        prefixIcon={<Icons.Settings />}
+                        size="small"
                       >
-                        <Icons.More />
-                      </IconButton>
-                    ),
-                    width: '80px'
-                  }
-                ]}
-                showSelection
-                virtualized={false}
-              />
+                        Columns
+                      </Button>
+                    }
+                    placement="bottom-end"
+                  >
+                    <Box direction="vertical" gap="8px" padding="12px">
+                      <Text size="small" weight="bold">Show/Hide Columns</Text>
+                      {Object.entries({
+                        transactionId: 'Transaction ID',
+                        customer: 'Customer',
+                        amount: 'Amount',
+                        paymentMethod: 'Payment Method',
+                        date: 'Date',
+                        status: 'Status',
+                        description: 'Description',
+                        actions: 'Actions'
+                      }).map(([key, label]) => (
+                        <Box key={key} align="center" gap="8px">
+                          <Checkbox
+                            checked={visibleColumns[key as keyof typeof visibleColumns]}
+                            onChange={() => setVisibleColumns(prev => ({
+                              ...prev,
+                              [key]: !prev[key as keyof typeof prev]
+                            }))}
+                          />
+                          <Text size="small">{label}</Text>
+                        </Box>
+                      ))}
+                    </Box>
+                  </PopoverMenu>
+                </Box>
+                <Table
+                  data={filteredTransactions}
+                  columns={[
+                    ...(visibleColumns.transactionId ? [{
+                      title: 'Transaction ID',
+                      render: (row: Transaction) => <Text>{row.id}</Text>,
+                      width: '150px'
+                    }] : []),
+                    ...(visibleColumns.customer ? [{
+                      title: 'Customer',
+                      render: (row: Transaction) => (
+                        <Box direction="vertical">
+                          <Text size="small" weight="bold">{row.customerName || 'N/A'}</Text>
+                          <Text size="tiny" secondary>{row.customerEmail || 'N/A'}</Text>
+                        </Box>
+                      ),
+                      width: '200px'
+                    }] : []),
+                    ...(visibleColumns.amount ? [{
+                      title: 'Amount',
+                      render: (row: Transaction) => (
+                        <Text weight="bold">
+                          {transactionService.formatAmount(row.amount, row.currency)}
+                        </Text>
+                      ),
+                      width: '120px'
+                    }] : []),
+                    ...(visibleColumns.paymentMethod ? [{
+                      title: 'Payment Method',
+                      render: (row: Transaction) => <Text>{row.paymentMethod}</Text>,
+                      width: '130px'
+                    }] : []),
+                    ...(visibleColumns.date ? [{
+                      title: 'Date',
+                      render: (row: Transaction) => <Text>{transactionService.formatDate(row.createdDate)}</Text>,
+                      width: '120px'
+                    }] : []),
+                    ...(visibleColumns.status ? [{
+                      title: 'Status',
+                      render: (row: Transaction) => getStatusBadge(row.status),
+                      width: '120px'
+                    }] : []),
+                    ...(visibleColumns.description ? [{
+                      title: 'Description',
+                      render: (row: Transaction) => (
+                        <Text size="small" secondary>
+                          {row.description || 'No description'}
+                        </Text>
+                      ),
+                      width: '200px'
+                    }] : []),
+                    ...(visibleColumns.actions ? [{
+                      title: 'Actions',
+                      render: (row: Transaction) => (
+                        <IconButton
+                          skin="standard"
+                          priority="secondary"
+                          onClick={() => dashboard.showToast({
+                            message: `View transaction ${row.id}`
+                          })}
+                        >
+                          <Icons.More />
+                        </IconButton>
+                      ),
+                      width: '80px'
+                    }] : [])
+                  ]}
+                  showSelection
+                  virtualized={false}
+                />
+              </Box>
             )}
           </Card>
         </Page.Content>
